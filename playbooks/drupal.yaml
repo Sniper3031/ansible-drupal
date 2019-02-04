@@ -36,13 +36,8 @@
       owner: www-data
       group: www-data
       mode : 0755
-  
-  - name: Downloading, configuring and installing Drupal|Step3 Setting up configuration files
-    copy:
-     src: utils/etc/apache2/drupal.conf  
-     dest: /etc/apache2/sites-available/drupal.conf
-    
-  - name: Downloading, configuring and installing Drupal|Step4 Installation
+
+  - name: Downloading, configuring and installing Drupal|Step3 Installation
     command:
       drush si standard -y
       --site-name="Hello!"

@@ -22,18 +22,18 @@
     postgresql_db:
       name: drupal
       encoding: UTF-8
-  
-#  - name: PSQL user creation  
-#    become: yes
-#    become_user: postgres
-#    vars:
-#      ansible_ssh_pipelining: true
-#    postgresql_user:
-#      db: drupal
-#      name: angel
-#      password: angel
-#      priv: "ALL"
-#      expires: infinity
+
+  - name: PSQL user creation  
+    become: yes
+    become_user: postgres
+    vars:
+      ansible_ssh_pipelining: true
+    postgresql_user:
+      db: drupal
+      name: angel
+      password: angel
+      priv: "ALL"
+      expires: infinity
 
   - name: Configuring postgreSQL
     copy: 
@@ -49,7 +49,5 @@
     - Restart PSQL
 
   handlers:
-    - name: Restart PSQL
-      service:
-       name: postgresql 
-       state: restarted
+    - name: restart postgresql
+      command: systemctl restart postgresql

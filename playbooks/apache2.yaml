@@ -29,6 +29,11 @@
     command: a2enmod proxy_fcgi setenvif
     command: a2enconf php7.0-fpm
 
+  - name: Setting up drupal.conf
+    copy:
+     src: utils/etc/apache2/drupal.conf
+     dest: /etc/apache2/sites-available/drupal.conf
+
   - name: Enabling drupal configuration
     command: a2ensite drupal.conf
 
