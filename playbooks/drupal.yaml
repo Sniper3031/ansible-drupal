@@ -38,7 +38,7 @@
       mode : 0755
 
   - name: Downloading, configuring and installing Drupal|Step3 Installation
-    command:
+    command: >
       drush si standard -y
       --site-name="Hello!"
       --account-name="angel"
