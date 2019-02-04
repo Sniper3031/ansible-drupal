@@ -41,8 +41,8 @@
     command:
       drush si standard -y
       --site-name="Hello!"
-      --account-name="drupal"
-      --account-pass="drupal"
+      --account-name="angel"
+      --account-pass="angel"
       --db-url=pgsql://angel:angel@192.168.0.10/drupal
       -r /var/www/html/drupal-8.6.7 -y
 
