@@ -43,10 +43,6 @@
      dest: /etc/apache2/sites-available/drupal.conf
     
   - name: Downloading, configuring and installing Drupal|Step4 Installation
-    command: a2dissite 000-default.conf
-    command: a2enmod proxy_fcgi setenvif
-    command: a2enconf php7.0-fpm   
-    command: a2ensite drupal.conf
     command:
       drush si standard -y
       --site-name="Hello!"
@@ -61,5 +57,5 @@
   handlers:
   - name: Reiniciar servicio web Apache
     service: 
-      name=apache2
-      state=restarted
+      name: apache2
+      state: restarted

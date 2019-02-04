@@ -13,14 +13,30 @@
      name: "{{ packages }}"
     vars:
      packages:
-     - apache2
-     - apache2-utils
-     - postgresql-client
-     - libapache2-mod-php7.0
-     - php7.0
-     - php7.0-fpm
-     - php-pgsql
-     - php7.0-dom
-     - php7.0-gd
-     - php7.0-xml
-     - php7.0-mbstring
+      - apache2
+      - libapache2-mod-php7.0
+      - php7.0-fpm
+      - php7.0-pgsql
+      - php-xml
+      - php7.0-gd
+      - php7.0-mbstring
+      - postgresql-client
+   
+  - name: Disabling default page
+    command: a2dissite 000-default.conf
+  
+  - name: Enabling php configuration
+    command: a2enmod proxy_fcgi setenvif
+    command: a2enconf php7.0-fpm
+
+  - name: Enabling drupal configuration
+    command: a2ensite drupal.conf
+
+    notify:
+      - restart apache2
+
+  handlers:
+    - name: restart apache2
+      service: 
+        name: apache2 
+        state: restarted
