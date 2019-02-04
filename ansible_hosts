@@ -1,0 +1,15 @@
+[nodo1] 
+
+192.168.0.10
+
+[nodo1:vars]
+
+ansible_ssh_private_key_file=.vagrant/machines/nodo1/virtualbox/private_key
+
+[nodo2]
+
+192.168.0.2 
+
+[nodo2:vars]
+
+ansible_ssh_private_key_file=.vagrant/machines/nodo2/virtualbox/private_key

@@ -1,0 +1,55 @@
+- name: Installing PostgreSQL
+  hosts: nodo1
+  become: true
+  tasks:
+  - name: Installing packages
+    apt:
+      name: "{{ packages }}"
+      update_cache: true
+      state: installed
+    vars:
+      packages:
+      - 'postgresql'
+      - 'libpq-dev'
+      - 'python-psycopg2'
+      - 'postgresql-contrib'
+
+  - name: Database creation
+    become: yes
+    become_user: postgres
+    vars:
+      ansible_ssh_pipelining: true
+    postgresql_db:
+      name: drupal
+      encoding: UTF-8
+  
+#  - name: PSQL user creation  
+#    become: yes
+#    become_user: postgres
+#    vars:
+#      ansible_ssh_pipelining: true
+#    postgresql_user:
+#      db: drupal
+#      name: angel
+#      password: angel
+#      priv: "ALL"
+#      expires: infinity
+
+  - name: Configuring postgreSQL
+    copy: 
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: postgres
+      group: postgres
+    with_items:
+    - { src: 'utils/etc/postgresql/postgresql.conf', dest: '/etc/postgresql/9.6/main/postgresql.conf' }
+    - { src: 'utils/etc/postgresql/pg_hba.conf', dest: '/etc/postgresql/9.6/main/pg_hba.conf' }
+
+    notify:
+    - Restart PSQL
+
+  handlers:
+    - name: Restart PSQL
+      service:
+       name: postgresql 
+       state: restarted

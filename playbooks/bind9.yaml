@@ -1,0 +1,36 @@
+
+- name: Instalation and configuration of DNS Bind9
+  hosts: nodo1
+  become: true
+  tasks:
+  - name: Ensuring bind9 is installed in the system.
+    apt: pkg=bind9
+
+
+  - name: Configuring zones in bind9
+    copy: > 
+      src=utils/etc/bind9/named.conf.local dest=/etc/bind/named.conf.local owner=bind group=bind mode=644
+
+    notify:
+      - restart bind
+
+  - name: Create zone file db.example.com
+    copy: >
+      src=utils/etc/bind9/db.example.com dest=/etc/bind/db.example.com 
+      mode=644
+      owner=bind
+      group=bind
+    
+    notify:
+      - restart bind
+
+  - name: Create zone file db.0.168.192
+    copy: >
+      src=utils/etc/bind9/db.0.168.192 dest=/etc/bind/db.10.0.0 owner=bind group=bind mode=644
+    notify:
+      - restart bind
+
+  handlers:
+    - name: restart bind
+      service: name=bind9 state=restarted
+

@@ -1,0 +1,63 @@
+- name: Installing and Configuring Drupal
+  hosts: nodo2
+  become: true
+  tasks:
+
+  - name: Installing and configuring Drush|Step1
+    get_url:
+     url: https://github.com/drush-ops/drush/releases/download/8.1.17/drush.phar
+     dest: /home/vagrant/drush
+  
+  - name: Installing and configuring Drush|Step2
+    command: mv /home/vagrant/drush /usr/local/bin/drush
+
+  - name: Installing and configuring Drush |Step3
+    file:
+     path: /usr/local/bin/drush
+     mode: 0755
+
+  - name: Installing zip
+    apt: 
+     name: unzip 
+     state: latest
+
+  - name: Downloading, configuring and installing Drupal|Step1 Download
+    get_url:
+      url: https://ftp.drupal.org/files/projects/drupal-8.6.7.zip
+      dest: /home/vagrant/drupal-8.6.7.zip
+  
+  - name: Downloading, configuring and installing Drupal|Step2 Unziping files
+    unarchive:
+      src: /home/vagrant/drupal-8.6.7.zip
+      dest: /var/www/html
+      remote_src: yes
+      owner: www-data
+      group: www-data
+      mode : 0755
+  
+  - name: Downloading, configuring and installing Drupal|Step3 Setting up configuration files
+    copy:
+     src: utils/etc/apache2/drupal.conf  
+     dest: /etc/apache2/sites-available/drupal.conf
+    
+  - name: Downloading, configuring and installing Drupal|Step4 Installation
+    command: a2dissite 000-default.conf
+    command: a2enmod proxy_fcgi setenvif
+    command: a2enconf php7.0-fpm   
+    command: a2ensite drupal.conf
+    command:
+      drush si standard -y
+      --site-name="drupal.example.com"
+      --account-name="drupal"
+      --account-pass="drupal"
+      --db-url=pgsql://angel:angel@192.168.0.10/drupal
+      -r /var/www/html/drupal-8.6.7 -y
+
+    notify: 
+     - Reiniciar servicio web Apache
+  
+  handlers:
+  - name: Reiniciar servicio web Apache
+    service: 
+      name=apache2
+      state=restarted

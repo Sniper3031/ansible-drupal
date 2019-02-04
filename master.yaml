@@ -1,0 +1,4 @@
+- include: playbooks/bind9.yaml
+- include: playbooks/postgreSQL.yaml
+- include: playbooks/apache2.yaml
+- include: playbooks/drupal.yaml

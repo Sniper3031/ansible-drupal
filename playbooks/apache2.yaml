@@ -1,0 +1,26 @@
+
+- name: Installing Apache2
+  hosts: nodo2
+  become: true
+  tasks:
+  
+  - name: Update package list
+    apt: 
+     update_cache: yes
+    
+  - name: Instaling packages
+    apt:
+     name: "{{ packages }}"
+    vars:
+     packages:
+     - apache2
+     - apache2-utils
+     - postgresql-client
+     - libapache2-mod-php7.0
+     - php7.0
+     - php7.0-fpm
+     - php-pgsql
+     - php7.0-dom
+     - php7.0-gd
+     - php7.0-xml
+     - php7.0-mbstring
