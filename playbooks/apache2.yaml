@@ -8,13 +8,14 @@
     apt: 
      update_cache: yes
     
-  - name: Instaling packages
+  - name: Installing packages
     apt:
-     name: "{{ packages }}"
-    vars:
-     packages:
+     name: "{{ item }}"
+    with_items:
       - apache2
-      - libapache2-mod-php7.0
+      - apache2-utils
+      - libapache2-mod-php
+      - php
       - php7.0-fpm
       - php7.0-pgsql
       - php-xml
@@ -25,8 +26,10 @@
   - name: Disabling default page
     command: a2dissite 000-default.conf
   
-  - name: Enabling php configuration
+  - name: Enabling apache2 modules
     command: a2enmod proxy_fcgi setenvif
+  
+  - name: Enabling PHP-FPM
     command: a2enconf php7.0-fpm
 
   - name: Setting up drupal.conf

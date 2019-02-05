@@ -46,11 +46,19 @@
       --db-url=pgsql://angel:angel@192.168.0.10/drupal
       -r /var/www/html/drupal-8.6.7 -y
 
+
+  - name: Fixing CSS with drush
+    command: drush config-set system.performance css.preprocess 0 -r /var/www/html/drupal-8.6.7 -y
+
+  - name: Fixing JS with drush
+    command: drush config-set system.performance js.preprocess 0 -r /var/www/html/drupal-8.6.7 -y
+
+
     notify: 
-     - Reiniciar servicio web Apache
+     - Reiniciar apache2
   
   handlers:
-  - name: Reiniciar servicio web Apache
+  - name: Reiniciar apache2
     service: 
       name: apache2
       state: restarted
